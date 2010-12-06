@@ -1,0 +1,319 @@
+<__trans_section component="TwitterBot">
+<mt:if name="id">
+    <$mt:setvar name="page_title" value="<__trans phrase="Edit tweet">"$>
+<mt:else>
+    <$mt:setvar name="page_title" value="<__trans phrase="Create tweet">"$>
+</mt:if>
+
+<mt:setvarblock name="system_msg">
+    <div id="msg-container">
+    <mt:if name="save_changes">
+        <mtapp:statusmsg
+            id="save-changes"
+            class="success">
+                <__trans phrase="Your changes have been saved.">
+        </mtapp:statusmsg>
+    </mt:if>
+    <mt:if name="saved">
+        <mtapp:statusmsg
+            id="save-changes"
+            class="success">
+                <__trans phrase="This tweet have been saved.">
+        </mtapp:statusmsg>
+    </mt:if>
+    </div>
+</mt:setvarblock>
+
+<mt:setvarblock name="action_buttons">
+    <button
+        type="submit"
+        accesskey="s"
+        title="<__trans phrase="Save changes to this tweet (s)">"
+        class="save action primary-button"
+        ><__trans phrase="Save Changes"></button>
+    <mt:if name="id">
+    <button
+        onclick="doRemoveItems(this.form, '<__trans phrase="tweet">', '<__trans phrase="tweet">', 'id', { 'return_args' : '__mode=list_tweet&amp;blog_id=<mt:var name="blog_id">' } )"
+        type="submit"
+        accesskey="x"
+        class="delete action"
+        title="<__trans phrase="Delete this tweet (x)">"
+        ><__trans phrase="Delete"></button>
+    </mt:if>
+</mt:setvarblock>
+
+<$mt:include name="include/header.tmpl"$>
+
+<form method="post" action="<mt:var name="script_url">">
+    <input type="hidden" name="id" value="<mt:var name="id" escape="html">" />
+    <input type="hidden" name="blog_id" value="<mt:var name="blog_id" escape="html">" />
+    <mt:unless name="id"><input type="hidden" name="author_id" value="<mt:var name="author_id" escape="html">" /></mt:unless>
+    <input type="hidden" name="__mode" value="save" />
+    <input type="hidden" name="action_name" value="" />
+    <input type="hidden" name="_type" value="tweet" />
+    <input type="hidden" name="return_args" value="__mode=view&amp;_type=tweet<mt:if name="blog_id">&amp;blog_id=<mt:var name="blog_id" escape="html"></mt:if><mt:if name="id">&amp;id=<mt:var name="id" escape="html"></mt:if>" />
+    <input type="hidden" name="magic_token" value="<$mt:var name="magic_token"$>" id="m_t" />
+
+    <mtapp:setting
+        id="name"
+        label="<__trans phrase="Name">"
+        show_hint="0">
+        <input type="text" name="name" value="<mt:var name="name" escape="html">" />
+        <p class="hint"><__trans phrase="Please name this tweet."></p>
+    </mtapp:setting>
+
+    <mtapp:setting
+        id="tweets"
+        label="<__trans phrase="Tweet">"
+        show_hint="0">
+        <textarea name="tweets" style="height:200px;"><mt:var name="tweets" escape="html"></textarea>
+        <p class="hint"><__trans phrase="One tweet per each line. Selected at random."></p>
+    </mtapp:setting>
+
+<mt:ignore>
+    <mtapp:setting
+        id="interval"
+        label="<__trans phrase="Interval">"
+        show_hint="0">
+        <input type="text" name="interval" value="<mt:var name="interval" escape="html">" style="width:150px;" /> <__trans phrase="Second(s)">
+        <p class="hint"><__trans phrase="Interval with the last tweets(Sec)."></p>
+    </mtapp:setting>
+</mt:ignore>
+
+    <mtapp:setting
+        id="is_special_day"
+        label="<__trans phrase="Date or day of week">"
+        show_hint="0">
+        <p>
+            <mt:unless name="is_special_day" eq="1"><mt:setvar name="is_special_day" value="0"></mt:unless>
+            <label><input type="radio" name="is_special_day" value="1"<mt:if name="is_special_day" eq="1"> checked="checked"</mt:if> onclick="toggleSection(this);" /> <__trans phrase="Date"></label>
+            <label><input type="radio" name="is_special_day" value="0"<mt:if name="is_special_day" eq="0"> checked="checked"</mt:if> onclick="toggleSection(this);" /> <__trans phrase="Day of week"></label>
+            <br />
+            <span class="hint">
+                <__trans phrase="Please select special day or day of week."><br />
+                <__trans phrase="If you switched this, following input is switched too.">
+            </span>
+        </p>
+    </mtapp:setting>
+    
+<script type="text/javascript">
+    function toggleSection ( element ) {
+        if ( element ) {
+            value = element.value;
+            if ( value == 1 ) {
+                date_section = document.getElementById( 'date-section' );
+                if ( date_section ) {
+                    date_section.style.display = '';
+                    date = document.getElementById( 'date' );
+                    if ( date ) {
+                        date.disabled = '';
+                    }
+                }
+                day_of_week_section = document.getElementById( 'day_of_week-section' );
+                if ( day_of_week_section ) {
+                    day_of_week_section.style.display = 'none';
+                    day_of_week = document.getElementById( 'day_of_week' );
+                    if ( day_of_week ) {
+                        day_of_week.disabled = 'disabled';
+                    }
+                }
+            } else if ( value == 0 ) {
+                date_section = document.getElementById( 'date-section' );
+                if ( date_section ) {
+                    date_section.style.display = 'none';
+                    date = document.getElementById( 'date' );
+                    if ( date ) {
+                        date.disabled = 'disabled';
+                    }
+                }
+                day_of_week_section = document.getElementById( 'day_of_week-section' );
+                if ( day_of_week_section ) {
+                    day_of_week_section.style.display = '';
+                    day_of_week = document.getElementById( 'day_of_week' );
+                    if ( day_of_week ) {
+                        day_of_week.disabled = '';
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+<div id="date-section"<mt:if name="is_special_day" eq="0"> style="display:none;"</mt:if>>
+    <mtapp:setting
+        id="date"
+        label="<__trans phrase="Date">"
+        show_hint="0">
+        <div class="date-time-fields">
+            <input type="text" class="post-date text-date" name="date" value="<$mt:var name="date" _default="$default_date" escape="html"$>" style="width:120px" />
+            <p class="hint"><__trans phrase="Click above input, and select day from calendar."></p>
+        </div>
+    </mtapp:setting>
+</div>
+
+<div id="day_of_week-section"<mt:if name="is_special_day" eq="1"> style="display:none;"</mt:if>>
+    <mtapp:setting
+        id="day_of_week"
+        label="<__trans phrase="Day of week">"
+        show_hint="0">
+        <select name="day_of_week" id="day_of_week">
+            <option value="0"<mt:if name="day_of_week" eq="0"> selected="selected"</mt:if>><__trans phrase="Sunday"></option>
+            <option value="1"<mt:if name="day_of_week" eq="1"> selected="selected"</mt:if>><__trans phrase="Monday"></option>
+            <option value="2"<mt:if name="day_of_week" eq="2"> selected="selected"</mt:if>><__trans phrase="Tuesday"></option>
+            <option value="3"<mt:if name="day_of_week" eq="3"> selected="selected"</mt:if>><__trans phrase="Wednesday"></option>
+            <option value="4"<mt:if name="day_of_week" eq="4"> selected="selected"</mt:if>><__trans phrase="Thursday"></option>
+            <option value="5"<mt:if name="day_of_week" eq="5"> selected="selected"</mt:if>><__trans phrase="Friday"></option>
+            <option value="6"<mt:if name="day_of_week" eq="6"> selected="selected"</mt:if>><__trans phrase="Saturday"></option>
+            <option value="DEFAULT"<mt:if name="day_of_week" eq="DEFAULT"> selected="selected"</mt:if>><__trans phrase="Default"></option>
+        </select>
+        <mt:if name="id">
+            <a title="<__trans phrase="View all tweet with this day of week">" href="<mt:var name="script_url">?__mode=list_tweet&amp;blog_id=<mt:var name="blog_id" escape="html">&amp;filter=day_of_week&amp;filter_val=<mt:var name="day_of_week" escape="html">"><img alt="<__trans phrase="Do filter">" src="<mt:var name="static_uri">images/filter.gif" width="8" height="8" border="0" /></a>
+        </mt:if>
+        <p class="hint">
+            <__trans phrase="Please select day of week to these tweet."><br />
+            <__trans phrase="If 'Default', used if there are no tweets for this day.">
+        </p>
+        <label><input type="radio" name="day_type" value="1"<mt:if name="day_type" eq="1"> checked="checked"</mt:if><mt:unless name="day_type"> checked="checked"</mt:unless> /> <__trans phrase="Both"></label>
+        <label><input type="radio" name="day_type" value="2"<mt:if name="day_type" eq="2"> checked="checked"</mt:if> /> <__trans phrase="Only weekday"></label>
+        <label><input type="radio" name="day_type" value="3"<mt:if name="day_type" eq="3"> checked="checked"</mt:if> /> <__trans phrase="Only holiday"></label>
+        <p class="hint"><__trans phrase="Holiay(exclude sunday and saturday) is judged by japanese holiday."></p>
+    </mtapp:setting>
+</div>
+
+    <mtapp:setting
+        id="timezone"
+        label="<__trans phrase="Timezone">">
+        <select id="timezone" name="timezone">
+            <option value="0"<mt:if name="timezone" eq="0"> selected="selected"</mt:if>><__trans phrase="0:00 - 1:00"></option>
+            <option value="1"<mt:if name="timezone" eq="1"> selected="selected"</mt:if>><__trans phrase="1:00 - 2:00"></option>
+            <option value="2"<mt:if name="timezone" eq="2"> selected="selected"</mt:if>><__trans phrase="2:00 - 3:00"></option>
+            <option value="3"<mt:if name="timezone" eq="3"> selected="selected"</mt:if>><__trans phrase="3:00 - 4:00"></option>
+            <option value="4"<mt:if name="timezone" eq="4"> selected="selected"</mt:if>><__trans phrase="4:00 - 5:00"></option>
+            <option value="5"<mt:if name="timezone" eq="5"> selected="selected"</mt:if>><__trans phrase="5:00 - 6:00"></option>
+            <option value="6"<mt:if name="timezone" eq="6"> selected="selected"</mt:if>><__trans phrase="6:00 - 7:00"></option>
+            <option value="7"<mt:if name="timezone" eq="7"> selected="selected"</mt:if>><__trans phrase="7:00 - 8:00"></option>
+            <option value="8"<mt:if name="timezone" eq="8"> selected="selected"</mt:if>><__trans phrase="8:00 - 9:00"></option>
+            <option value="9"<mt:if name="timezone" eq="9"> selected="selected"</mt:if>><__trans phrase="9:00 - 10:00"></option>
+            <option value="10"<mt:if name="timezone" eq="10"> selected="selected"</mt:if>><__trans phrase="10:00 - 11:00"></option>
+            <option value="11"<mt:if name="timezone" eq="11"> selected="selected"</mt:if>><__trans phrase="11:00 - 12:00"></option>
+            <option value="12"<mt:if name="timezone" eq="12"> selected="selected"</mt:if>><__trans phrase="12:00 - 13:00"></option>
+            <option value="13"<mt:if name="timezone" eq="13"> selected="selected"</mt:if>><__trans phrase="13:00 - 14:00"></option>
+            <option value="14"<mt:if name="timezone" eq="14"> selected="selected"</mt:if>><__trans phrase="14:00 - 15:00"></option>
+            <option value="15"<mt:if name="timezone" eq="15"> selected="selected"</mt:if>><__trans phrase="15:00 - 16:00"></option>
+            <option value="16"<mt:if name="timezone" eq="16"> selected="selected"</mt:if>><__trans phrase="16:00 - 17:00"></option>
+            <option value="17"<mt:if name="timezone" eq="17"> selected="selected"</mt:if>><__trans phrase="17:00 - 18:00"></option>
+            <option value="18"<mt:if name="timezone" eq="18"> selected="selected"</mt:if>><__trans phrase="18:00 - 19:00"></option>
+            <option value="19"<mt:if name="timezone" eq="19"> selected="selected"</mt:if>><__trans phrase="19:00 - 20:00"></option>
+            <option value="20"<mt:if name="timezone" eq="20"> selected="selected"</mt:if>><__trans phrase="20:00 - 21:00"></option>
+            <option value="21"<mt:if name="timezone" eq="21"> selected="selected"</mt:if>><__trans phrase="21:00 - 22:00"></option>
+            <option value="22"<mt:if name="timezone" eq="22"> selected="selected"</mt:if>><__trans phrase="22:00 - 23:00"></option>
+            <option value="23"<mt:if name="timezone" eq="23"> selected="selected"</mt:if>><__trans phrase="23:00 - 24:00"></option>
+            <option value="DEFAULT"<mt:if name="timezone" eq="DEFAULT"> selected="selected"</mt:if>><__trans phrase="Default"></option>
+        </select>
+        <mt:if name="id">
+            <a title="<__trans phrase="View all tweet with this day of week">" href="<mt:var name="script_url">?__mode=list_tweet&amp;blog_id=<mt:var name="blog_id" escape="html">&amp;filter=timezone&amp;filter_val=<mt:var name="timezone" escape="html">"><img alt="<__trans phrase="Do filter">" src="<mt:var name="static_uri">images/filter.gif" width="8" height="8" border="0" /></a>
+        </mt:if>
+        <p class="hint">
+            <__trans phrase="Please select timezone to these tweet."><br />
+            <__trans phrase="If 'Default', used if there are no tweets for this hour.">
+        </p>
+    </mtapp:setting>
+
+    <mtapp:setting
+        id="return_follow"
+        label="<__trans phrase="Return follow">"
+        show_hint="0">
+        <label><input type="checkbox" name="return_follow"<mt:if name="return_follow"> checked="checked"</mt:if> /> <__trans phrase="Do"></label>
+        <input type="hidden" name="return_follow" value="0" />
+        <p class="hint"><__trans phrase="To judge spam or not, plugin setting is used."></p>
+    </mtapp:setting>
+
+<div id="tweets_at_return_follow-section">
+    <mtapp:setting
+        id="tweets_at_return_follow"
+        label="<__trans phrase="Tweets at return follow">"
+        show_hint="0">
+        <textarea name="tweets_at_return_follow" style="height:200px;margin-bottom:8px;"><mt:var name="tweets_at_return_follow" escape="html"></textarea><br />
+        <label><input type="checkbox" name="no_hash_tags_at_return_follow"<mt:if name="no_hash_tags_at_return_follow"> checked="checked"</mt:if> /> <__trans phrase="No hash tags"></label>
+        <input type="hidden" name="no_hash_tags_at_return_follow" value="0" />
+        <p class="hint"><__trans phrase="One tweet per each line. Selected at random."></p>
+    </mtapp:setting>
+</div>
+
+    <mtapp:setting
+        id="search_follow"
+        label="<__trans phrase="Search follow">"
+        show_hint="0">
+        <label><input type="checkbox" name="search_follow"<mt:if name="search_follow"> checked="checked"</mt:if> /> <__trans phrase="Do"></label>
+        <input type="hidden" name="search_follow" value="0" />
+        <p class="hint"><__trans phrase="Follow users who tweet specify words."></p>
+    </mtapp:setting>
+
+<mt:ignore>
+<script type="text/javascript">
+    function toggleSection2 ( element ) {
+        if ( element ) {
+            is_checked = element.checked;
+            if ( is_checked == 'true' ) {
+                search_words_section = document.getElementById( 'search_words-section' );
+                if ( search_words_section ) {
+                    search_words_section.style.display = '';
+                    search_words = document.getElementById( 'search_words' );
+                    if ( search_words ) {
+                        search_words.disabled = '';
+                    }
+                }
+            } else if ( is_checked == 'false' ) {
+                search_words_section = document.getElementById( 'search_words-section' );
+                if ( search_words_section ) {
+                    search_words_section.style.display = 'none';
+                    search_words = document.getElementById( 'search_words' );
+                    if ( search_words ) {
+                        search_words.disabled = 'disabled';
+                    }
+                }
+            }
+        }
+    }
+</script>
+</mt:ignore>
+
+<div id="search_words-section">
+    <mtapp:setting
+        id="search_words"
+        label="<__trans phrase="Search words">"
+        show_hint="0">
+        <textarea name="search_words" style="height:200px;"><mt:var name="search_words" escape="html"></textarea>
+        <p class="hint"><__trans phrase="One tweet per each line. Every words are search."></p>
+    </mtapp:setting>
+
+    <mtapp:setting
+        id="tweets_at_search_follow"
+        label="<__trans phrase="Tweets at search follow">"
+        show_hint="0">
+        <textarea name="tweets_at_search_follow" style="height:200px;"><mt:var name="tweets_at_search_follow" escape="html"></textarea>
+        <p class="hint"><__trans phrase="One tweet per each line. Selected at random."></p>
+    </mtapp:setting>
+</div>
+
+    <mtapp:setting
+        id="unfollow"
+        label="<__trans phrase="Unfollow">"
+        show_hint="0">
+        <label><input type="checkbox" name="unfollow"<mt:if name="unfollow"> checked="checked"</mt:if> /> <__trans phrase="Do"></label>
+        <input type="hidden" name="unfollow" value="0" />
+        <p class="hint"><__trans phrase="Remove user who does not create friend with me."></p>
+    </mtapp:setting>
+    
+    <div class="actions-bar  pkg">
+        <div class="actions-bar-inner">
+            <div class="button-actions actions">
+            <mt:var name="action_buttons">
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<$mt:include name="include/footer.tmpl"$>
+</__trans_section>

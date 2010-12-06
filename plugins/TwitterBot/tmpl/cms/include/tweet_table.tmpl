@@ -1,0 +1,101 @@
+<__trans_section component="TwitterBot">
+<mt:setvarblock name="list_id"><$mt:var name="object_type"$>-listing</mt:setvarblock>
+<mt:if name="blog_id"><mt:var name="blog_view" value="1"></mt:if>
+
+<mt:setvarblock name="action_buttons">
+    <mt:if name="state_editable">
+        <button
+            onclick="doRemoveItems(getByID('<$mt:var name="object_type"$>-listing-form'), '<__trans phrase="tweet" escape="js">', '<__trans phrase="tweets" escape="js">'); return false;"
+            accesskey="u"
+            title="<__trans phrase="Delete selected tweets (x)">"
+            ><__trans phrase="Delete"></button>
+    </mt:if>
+</mt:setvarblock>
+
+<mtapp:listing id="$list_id">
+    <mt:if __first__>
+            <thead>
+                <tr>
+                    <th class="cb"><input type="checkbox" name="id-head" value="all" class="select" /></th>
+                    <th class="name"><__trans phrase="Name"></th>
+                    <th class="tweet"><__trans phrase="Tweet"></th>
+                    <th class="author"><__trans phrase="Author"></th>
+                    <th class="date"><__trans phrase="Date"></th>
+                    <th class="day_of_week"><__trans phrase="Day of week"></th>
+                    <th class="timezone"><__trans phrase="Timezone"></th>
+                    <th class="date"><__trans phrase="Created On"></th>
+                    <th class="date"><__trans phrase="Modified On"></th>
+                </tr>
+            </thead>
+            <tbody>
+    </mt:if>
+                <tr class="<mt:if name="__odd__">odd<mt:else>even</mt:if>">
+                    <td class="cb">
+            <mt:if name="has_edit_access">
+                        <input type="checkbox" name="id" value="<mt:var name="id" escape="html">" class="select" />
+            <mt:else>
+                        &nbsp;
+            </mt:if>
+                    </td>
+					<td class="name"><a href="<mt:var name="script_url">?__mode=view&amp;_type=tweet&amp;id=<mt:var name="id" escape="url">&amp;blog_id=<mt:var name="blog_id" escape="url">" title="<__trans phrase="Edit this tweet">"><mt:var name="name" default="..." escape="html"></a></td>
+                    <td class="tweet"><mt:var name="tweets" trim_to="50">...</td>
+                    <td class="author"><mt:var name="author_name"></td>
+                    <td class="date">
+                        <mt:if name="is_special_day">
+                            <mt:var name="date">
+                        </mt:if>
+                    </td>
+                    <td class="day_of_week">
+                        <mt:unless name="is_special_day">
+                            <mt:if name="day_of_week" eq="0"><__trans phrase="Sunday"></mt:if>
+                            <mt:if name="day_of_week" eq="1"><__trans phrase="Monday"></mt:if>
+                            <mt:if name="day_of_week" eq="2"><__trans phrase="Tuesday"></mt:if>
+                            <mt:if name="day_of_week" eq="3"><__trans phrase="Wednesday"></mt:if>
+                            <mt:if name="day_of_week" eq="4"><__trans phrase="Thursday"></mt:if>
+                            <mt:if name="day_of_week" eq="5"><__trans phrase="Friday"></mt:if>
+                            <mt:if name="day_of_week" eq="6"><__trans phrase="Saturday"></mt:if>
+                            <mt:if name="day_of_week" eq="DEFAULT"><__trans phrase="Default"></mt:if>
+                        </mt:unless>
+                    </td>
+                    <td class="timezone">
+                        <mt:if name="timezone" eq="0"><__trans phrase="0:00 - 1:00"></mt:if>
+                        <mt:if name="timezone" eq="1"><__trans phrase="1:00 - 2:00"></mt:if>
+                        <mt:if name="timezone" eq="2"><__trans phrase="2:00 - 3:00"></mt:if>
+                        <mt:if name="timezone" eq="3"><__trans phrase="3:00 - 4:00"></mt:if>
+                        <mt:if name="timezone" eq="4"><__trans phrase="4:00 - 5:00"></mt:if>
+                        <mt:if name="timezone" eq="5"><__trans phrase="5:00 - 6:00"></mt:if>
+                        <mt:if name="timezone" eq="6"><__trans phrase="6:00 - 7:00"></mt:if>
+                        <mt:if name="timezone" eq="7"><__trans phrase="7:00 - 8:00"></mt:if>
+                        <mt:if name="timezone" eq="8"><__trans phrase="8:00 - 9:00"></mt:if>
+                        <mt:if name="timezone" eq="9"><__trans phrase="9:00 - 10:00"></mt:if>
+                        <mt:if name="timezone" eq="10"><__trans phrase="10:00 - 11:00"></mt:if>
+                        <mt:if name="timezone" eq="11"><__trans phrase="11:00 - 12:00"></mt:if>
+                        <mt:if name="timezone" eq="12"><__trans phrase="12:00 - 13:00"></mt:if>
+                        <mt:if name="timezone" eq="13"><__trans phrase="13:00 - 14:00"></mt:if>
+                        <mt:if name="timezone" eq="14"><__trans phrase="14:00 - 15:00"></mt:if>
+                        <mt:if name="timezone" eq="15"><__trans phrase="15:00 - 16:00"></mt:if>
+                        <mt:if name="timezone" eq="16"><__trans phrase="16:00 - 17:00"></mt:if>
+                        <mt:if name="timezone" eq="17"><__trans phrase="17:00 - 18:00"></mt:if>
+                        <mt:if name="timezone" eq="18"><__trans phrase="18:00 - 19:00"></mt:if>
+                        <mt:if name="timezone" eq="19"><__trans phrase="19:00 - 20:00"></mt:if>
+                        <mt:if name="timezone" eq="20"><__trans phrase="20:00 - 21:00"></mt:if>
+                        <mt:if name="timezone" eq="21"><__trans phrase="21:00 - 22:00"></mt:if>
+                        <mt:if name="timezone" eq="22"><__trans phrase="22:00 - 23:00"></mt:if>
+                        <mt:if name="timezone" eq="23"><__trans phrase="23:00 - 24:00"></mt:if>
+                        <mt:if name="timezone" eq="DEFAULT"><__trans phrase="Default"></mt:if>
+                    </td>
+                    <td class="date"><span><mt:var name="created_on_formatted"></span></td>
+                    <td class="date"><span><mt:var name="modified_on_formatted"></span></td>
+                </tr>
+    <mt:if __last__>
+            </tbody>
+    </mt:if>
+</mtapp:listing>
+<mt:setvarblock name="jq_js_include" append="1">
+    jQuery('button.mt-delete-items').mtDeleteItems({
+        id: '<$mt:var name="object_type"$>-listing-form',
+        singular: '<mt:var name="object_label" lower_case="1" escape="js">',
+        plural: '<mt:var name="object_label_plural" lower_case="1" escape="js">'
+    });
+</mt:setvarblock>
+</__trans_section>

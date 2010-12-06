@@ -1,0 +1,54 @@
+<mt:setvarblock name="page_title"><$mt:var name="page_title"$></mt:setvarblock>
+
+<mt:if name="msg">
+    <mt:if name="is_success">
+<mt:setvarblock name="system_msg" append="1">
+        <mtapp:statusmsg
+            id="saved-changes"
+            class="success">
+            <mt:var name="msg">
+        </mtapp:statusmsg>
+</mt:setvarblock>
+    <mt:else>
+<mt:setvarblock name="system_msg" append="1">
+        <mtapp:statusmsg
+            id="error"
+            class="error">
+            <mt:var name="msg">
+        </mtapp:statusmsg>
+</mt:setvarblock>
+    </mt:if>
+</mt:if>
+
+<mt:include name="include/header.tmpl">
+
+<mt:if name="is_success">
+<mt:if name="show_table">
+<div id="main-content">
+    <div id="main-content"><div id="main-content-inner" class="inner pkg">
+    <div id="group-listing" class="listing ">
+    <table id="group-listing-table" class="category-listing-table compact" cellspacing="0">
+        <thead>
+            <tr>
+                <th><__trans phrase="Label"></th>
+                <th><__trans phrase="Value"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="odd">
+                <td><__trans phrase="Access token"></td>
+                <td><mt:var name="access_token"></td>
+            </tr>
+            <tr class="even">
+                <td><__trans phrase="Access token secret"></td>
+                <td><mt:var name="access_secret"></td>
+            </tr>
+        </tbody>
+    </table>
+    </div></div>
+    </div>
+</div>
+</mt:if>
+</mt:if>
+
+<mt:include name="include/footer.tmpl">

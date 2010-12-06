@@ -1,0 +1,165 @@
+<style type="text/css">
+    .mediumHeader {
+        border-bottom: 1px solid #cddee7;
+        padding-bottom: 3px;
+        margin-bottom: 25px;
+    }
+    .subHeader {
+        border-bottom: 1px dotted #cddee7;
+        padding-bottom: 3px;
+        margin-bottom: 25px;
+    }
+</style>
+<h3 class="mediumHeader"><__trans phrase="Settings for OAuth"></h3>
+<h4 class="subHeader"><__trans phrase="Register an Application"></h4>
+<mtapp:setting
+    id="register"
+    label="<__trans phrase="Register">">
+    <a href="http://twitter.com/apps/new" target="_blank"><__trans phrase="Click to register twitterbot"></a>
+    <p class="hint">
+        <__trans phrase="Please input following url at 'Callback URL'">: <br />
+        <[*mt_dir_uri*]><$mt:adminscript$>?__mode=twitter_oauth_callback&amp;blog_id=<[*this_blog_id*]><br />
+        <__trans phrase="Please check 'Read & Write' at 'Default Access type'"><br />
+        <__trans phrase="Please copy and paste from registered screen.">
+    </p>
+</mtapp:setting>
+<mtapp:setting
+    id="consumer_key"
+    label="<__trans phrase="Your Consumer key">"
+    required="1">
+    <input type="text" class="text" name="consumer_key" value="<mt:var name="consumer_key">" />
+    <p class="hint"><__trans phrase="Copy and paste from twitter registration."></p>
+</mtapp:setting>
+<mtapp:setting
+    id="consumer_secret"
+    label="<__trans phrase="Your Consumer secret">"
+    required="1">
+    <input type="text" class="text" name="consumer_secret" value="<mt:var name="consumer_secret">" />
+    <p class="hint"><__trans phrase="Copy and paste from twitter registration."></p>
+</mtapp:setting>
+<mtapp:setting
+    id="callback_url"
+    label="<__trans phrase="Callback URL">"
+    required="1">
+    <input type="text" class="text" name="callback_url" value="<mt:var name="callback_url">" />
+    <p class="hint">
+        <__trans phrase="Must be include http://"><br />
+        <__trans phrase="If you don't have special reason, Plase use this">:<br /><[*mt_dir_uri*]><$mt:adminscript$>?__mode=twitter_oauth_callback&amp;blog_id=<[*this_blog_id*]>
+    </p>
+</mtapp:setting>
+<mt:if mt:var name="consumer_key">
+	<mt:if mt:var name="consumer_secret">
+		<mt:if mt:var name="callback_url">
+<h4 class="subHeader"><__trans phrase="Get Access token"></h4>
+<mtapp:setting
+    id="get_access_token"
+    label="<__trans phrase="Get">">
+    <a href="<mt:var name="mt_uri">?__mode=twitter_oauth_request&amp;blog_id=<[*this_blog_id*]>"><__trans phrase="Access to get token"></a>
+    <p class="hint"><__trans phrase="Get token, following is filled in by auto."></p>
+</mtapp:setting>
+<mtapp:setting
+    id="access_token"
+    label="<__trans phrase="Your Twitter Access token">"
+    required="1">
+    <input type="text" class="text" name="access_token" value="<mt:var name="access_token">" />
+</mtapp:setting>
+<mtapp:setting
+    id="access_secret"
+    label="<__trans phrase="Your Twitter Access secret">"
+    required="1">
+    <input type="text" class="text" name="access_secret" value="<mt:var name="access_secret">" />
+</mtapp:setting>
+<mtapp:setting
+    id="access_secret"
+    label="<__trans phrase="Test post with your OAuth token">">
+    <a href="<mt:var name="mt_uri">?__mode=twitter_oauth_test&amp;blog_id=<[*this_blog_id*]>" target="_blank"><__trans phrase="Click to test post"></a>
+    <p class="hint">&nbsp;</p>
+</mtapp:setting>
+            <mt:if name="access_token">
+                <mt:if name="access_secret">
+<h3 class="mediumHeader"><__trans phrase="Settings for bit.ly"></h3>
+<mtapp:setting
+    id="bitly_username"
+    label="<__trans phrase="Your bit.ly name">">
+    <input type="text" class="text" name="bitly_username" value="<mt:var name="bitly_username">" />
+</mtapp:setting>
+<mtapp:setting
+    id="bitly_api_key"
+    label="<__trans phrase="Your bit.ly API">">
+    <input type="text" class="text" name="bitly_api_key" value="<mt:var name="bitly_api_key">" />
+    <p class="hint"><a href="http://bit.ly/account/your_api_key/" target="_blank"><__trans phrase="Click to check bit.ly API"></a></p>
+</mtapp:setting>
+<h3 class="mediumHeader"><__trans phrase="Other Settings"></h3>
+<h4 class="subHeader"><__trans phrase="Settings for tweet"></h4>
+<mtapp:setting
+    id="hashtag"
+    label="<__trans phrase="Add Hashtag">">
+    <input type="text" class="text" name="hashtag" value="<mt:var name="hashtag">" />
+    <p class="hint">
+        <__trans phrase="Comma district switching off, space is removed at posting."><br />
+        <__trans phrase="ex">: foo, bar, hoge
+    </p>
+</mtapp:setting>
+<h4 class="subHeader"><__trans phrase="Settings for follow"></h4>
+<mtapp:setting
+    id="japan_only_for_follow"
+    label="<__trans phrase="Japan only">"
+    hint=""
+    show_hint="0">
+    <label><input type="checkbox" name="japan_only_for_follow" id="japan_only_for_follow" <mt:if name="japan_only_for_follow"> checked="checked"</mt:if> /> <__trans phrase="Only"></label>
+    <p class="hint"><__trans phrase="Used at search follow."></p>
+</mtapp:setting>
+<mtapp:setting
+    id="follow_return_follow_follower_ratio"
+    label="<__trans phrase="Ratio of follow to follower">"
+    hint=""
+    show_hint="0">
+    <select name="follow_return_follow_follower_ratio" id="follow_return_follow_follower_ratio">
+        <option value="5"<mt:if name="follow_return_follow_follower_ratio" eq="5"> selected="selected"</mt:if>>5</option>
+        <option value="10"<mt:if name="follow_return_follow_follower_ratio" eq="10"> selected="selected"</mt:if>>10</option>
+        <option value="15"<mt:if name="follow_return_follow_follower_ratio" eq="15"> selected="selected"</mt:if>>15</option>
+        <option value="25"<mt:if name="follow_return_follow_follower_ratio" eq="25"> selected="selected"</mt:if>>25</option>
+        <option value="50"<mt:if name="follow_return_follow_follower_ratio" eq="50"> selected="selected"</mt:if>>50</option>
+        <option value="100"<mt:if name="follow_return_follow_follower_ratio" eq="100"> selected="selected"</mt:if>>100</option>
+        <option value="200"<mt:if name="follow_return_follow_follower_ratio" eq="200"> selected="selected"</mt:if>>200</option>
+        <option value="500"<mt:if name="follow_return_follow_follower_ratio" eq="500"> selected="selected"</mt:if>>500</option>
+    </select>
+    <__trans phrase="or upper is spam">
+    <p class="hint"><__trans phrase="If spam, not follow."></p>
+</mtapp:setting>
+<h4 class="subHeader"><__trans phrase="Settings for unfollow"></h4>
+<mtapp:setting
+    id="unfollow_interval"
+    label="<__trans phrase="Unfollow check interval(sec)">"
+    hint=""
+    show_hint="0">
+    <input type="text" name="unfollow_interval" id="unfollow_interval" style="width:50px;" value="<mt:var name="unfollow_interval" escape="html">" /> <__trans phrase="Seconds">
+</mtapp:setting>
+<h4 class="subHeader"><__trans phrase="Setting for default"></h4>
+<mtapp:setting
+    id="default_search_words"
+    label="<__trans phrase="Search words">"
+    show_hint="0">
+    <textarea name="default_search_words" style="height:200px;"><mt:var name="default_search_words" escape="html"></textarea>
+</mtapp:setting>
+<mtapp:setting
+    id="default_tweets_at_search_follow"
+    label="<__trans phrase="Tweets at search follow">"
+    show_hint="0">
+    <textarea name="default_tweets_at_search_follow" style="height:200px;"><mt:var name="default_tweets_at_search_follow" escape="html"></textarea>
+</mtapp:setting>
+<mtapp:setting
+    id="default_tweets_at_return_follow"
+    label="<__trans phrase="Tweets at return follow">"
+    show_hint="0">
+    <textarea name="default_tweets_at_return_follow" style="height:200px;"><mt:var name="default_tweets_at_return_follow" escape="html"></textarea>
+</mtapp:setting>
+
+<input type="hidden" name="since_id_for_search" value="<mt:var name="since_id_for_search" escape="html">">
+<input type="hidden" name="unfollow_last_time" value="<mt:var name="unfollow_last_time" escape="html">">
+
+                </mt:if>
+            </mt:if>
+		</mt:if>
+	</mt:if>
+</mt:if>
